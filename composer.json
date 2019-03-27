@@ -1,0 +1,27 @@
+{
+  "name": "dimns/websocket-php",
+  "description": "WebSocket сервер на php (построен на базе Workerman)",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dmitrii Shcherbakov",
+      "email": "info@bestion.ru",
+      "homepage": "http://bestion.ru",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WebSocketPHP\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.0.0",
+    "monolog/monolog": "~1.22",
+    "workerman/workerman": "~3.5",
+    "ext-json": "*",
+    "ext-posix": "*",
+    "ext-pcntl": "*"
+  }
+}
