@@ -29,7 +29,7 @@ $pid_file = __DIR__ . '/websocketphp.pid';
 $ws_port = 8090;
 
 // TCP порт
-$tcp_port = 5060;
+$tcp_port = 5020;
 
 /**
  * Функция для определения ИД пользователя (может отсутствовать)
@@ -84,7 +84,7 @@ webSocketPHP.init({
 use WebSocketPHP\Sender;
 
 // TCP порт
-$tcp_port = 5060;
+$tcp_port = 5020;
 
 $sender = new Sender($tcp_port);
 
