@@ -2,7 +2,7 @@
 /**
  * WebSocketPHP
  *
- * @version 01.03.2019
+ * @version 03.04.2019
  * @author  Дмитрий Щербаков <atomcms@ya.ru>
  */
 
@@ -173,7 +173,7 @@ class Server
     /**
      * Мессенджер
      *
-     * @version 01.03.2019
+     * @version 03.04.2019
      * @author  Дмитрий Щербаков <atomcms@ya.ru>
      */
     protected function initMessenger()
@@ -185,21 +185,26 @@ class Server
         $this->tcp_worker->onMessage = function ($connection, $data) {
             if ($connection) {
                 $data = json_decode($data, true);
-                if ($data['uid'] === 0) {
-                    // Отправляем сообщение всем пользователям
-                    foreach ($this->ws_worker->connections as $webconnection) {
-                        /** @var TcpConnection $webconnection */
-                        $webconnection->send(json_encode($data['message']));
-                    }
-                } else {
-                    // Отправляем сообщение пользователю по user_id
-                    $user_connections = array_keys($this->users_connections, $data['uid']);
-                    if (!empty($user_connections)) {
-                        foreach ($user_connections as $conn_id) {
-                            if (isset($this->ws_worker->connections[$conn_id])) {
+
+                if (is_array($data['uids']) && count($data['uids']) > 0) {
+                    foreach ($data['uids'] as $uid) {
+                        if ($uid === 0) {
+                            // Отправляем сообщение всем пользователям
+                            foreach ($this->ws_worker->connections as $webconnection) {
                                 /** @var TcpConnection $webconnection */
-                                $webconnection = $this->ws_worker->connections[$conn_id];
                                 $webconnection->send(json_encode($data['message']));
+                            }
+                        } else {
+                            // Отправляем сообщение пользователю по user_id
+                            $user_connections = array_keys($this->users_connections, $uid);
+                            if (!empty($user_connections)) {
+                                foreach ($user_connections as $conn_id) {
+                                    if (isset($this->ws_worker->connections[$conn_id])) {
+                                        /** @var TcpConnection $webconnection */
+                                        $webconnection = $this->ws_worker->connections[$conn_id];
+                                        $webconnection->send(json_encode($data['message']));
+                                    }
+                                }
                             }
                         }
                     }

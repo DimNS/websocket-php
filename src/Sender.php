@@ -2,7 +2,7 @@
 /**
  * Отправка сообщений в WebSocket
  *
- * @version 01.03.2019
+ * @version 03.04.2019
  * @author  Дмитрий Щербаков <atomcms@ya.ru>
  */
 
@@ -36,13 +36,13 @@ class Sender
     /**
      * Отправка сообщения
      *
-     * @param integer $user_id ИД пользователя (или 0 для отправки всем пользователям)
-     * @param string  $type    Тип сообщения
-     * @param array   $data    Массив данных для сообщения
+     * @param integer|array $user_id ИД пользователя (0 для отправки всем пользователям) или массив ИД пользователей
+     * @param string        $type    Тип сообщения
+     * @param array         $data    Массив данных для сообщения
      *
      * @return integer|boolean
      *
-     * @version 01.03.2019
+     * @version 03.04.2019
      * @author  Дмитрий Щербаков <atomcms@ya.ru>
      */
     public function send($user_id, $type, $data = [])
@@ -50,8 +50,18 @@ class Sender
         // Соединяемся с локальным tcp-сервером
         $instance = stream_socket_client('tcp://127.0.0.1:' . $this->tcp_port);
 
+        $uids = [];
+
+        if (is_integer($user_id)) {
+            $uids[] = $user_id;
+        }
+
+        if (is_array($user_id)) {
+            $uids = $user_id;
+        }
+
         $data = [
-            'uid'     => $user_id,
+            'uids'    => $uids,
             'message' => [
                 'type' => $type,
                 'data' => $data,
