@@ -94,7 +94,7 @@ class Server
     /**
      * Запуск сервера
      *
-     * @version 01.03.2019
+     * @version 03.04.2019
      * @author  Дмитрий Щербаков <atomcms@ya.ru>
      */
     public function start()
@@ -151,6 +151,9 @@ class Server
 
                     $this->log->info('Connected: ' . $uid);
                 } else {
+                    /** @var TcpConnection $connection */
+                    $connection->close();
+
                     $this->log->warning('Not connected (empty uid): ' . $uid);
                 }
             };
