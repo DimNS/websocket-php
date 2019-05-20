@@ -20,8 +20,10 @@
     "php": ">=7.0.0",
     "monolog/monolog": "~1.22",
     "workerman/workerman": "~3.5",
-    "ext-json": "*",
-    "ext-posix": "*",
-    "ext-pcntl": "*"
+    "ext-json": "*"
+  },
+  "suggest": {
+    "ext-posix": "Needed on Linux to access functions: posix_kill() and posix_getpid()",
+    "ext-pcntl": "Needed on Linux to access function: pcntl_fork()"
   }
 }

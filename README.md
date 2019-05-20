@@ -3,14 +3,10 @@ WebSocket сервер на php (построен на базе Workerman)
 
 ## Сервер
 1. Установка (рекомендуется устанавливать внутри проекта, чтобы иметь доступ к вашему коду для определения ID пользователя и удобной отправки сообщений клиентам)
-  - Linux
   ```shell
-  composer require dimns/websocket-php
+composer require dimns/websocket-php
 ```
-  - Windows
-  ```shell
-  composer require dimns/websocket-php --ignore-platform-reqs
-```
+\* При установке на `Linux` необходимы php-модули `ext-posix` и `ext-pcntl`
 
 2. Создаём файл `/var/www/ws_server.php` с содержимым:
   ```php
