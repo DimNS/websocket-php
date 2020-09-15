@@ -1,22 +1,21 @@
 <?php
+
 /**
  * WebSocketPHP
  *
- * @version 03.04.2019
  * @author  Дмитрий Щербаков <atomcms@ya.ru>
+ *
+ * @version 15.09.2020
  */
 
 namespace WebSocketPHP;
 
 use Exception;
-use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
 
 /**
- * Class Server
- *
  * @package WebSocketPHP
  */
 class Server
@@ -70,21 +69,13 @@ class Server
      * @param integer       $tcp_port         TCP порт
      * @param callable|null $func_get_user_id Функция для определения ИД пользователя
      *
-     * @version 01.03.2019
      * @author  Дмитрий Щербаков <atomcms@ya.ru>
+     *
+     * @version 15.09.2020
      */
     public function __construct($log_folder, $pid_file, $ws_port, $tcp_port, $func_get_user_id = null)
     {
-        $log_folder = LogFolder::validate($log_folder);
-
-        $this->log = new Logger('WebSocketPHP');
-        $filename = $log_folder . 'websocket-php.log';
-        $handler = new RotatingFileHandler($filename);
-
-        $handler->setFilenameFormat('{date}-{filename}', 'Y/m/d');
-
-        $this->log->pushHandler($handler);
-
+        $this->log = Log::create($log_folder);
         $this->ws_port = $ws_port;
         $this->tcp_port = $tcp_port;
         $this->func_get_user_id = $func_get_user_id;
