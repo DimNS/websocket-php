@@ -10,8 +10,8 @@
 
 namespace WebSocketPHP;
 
-use Exception;
 use Monolog\Logger;
+use Throwable;
 use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
 
@@ -167,8 +167,9 @@ class Server
     /**
      * Мессенджер
      *
-     * @version 03.04.2019
      * @author  Дмитрий Щербаков <atomcms@ya.ru>
+     *
+     * @version 15.09.2020
      */
     protected function initMessenger()
     {
@@ -208,8 +209,12 @@ class Server
 
         try {
             $this->tcp_worker->listen();
-        } catch (Exception $e) {
-            $this->log->error('initMessenger(): ' . $e->getMessage());
+        } catch (Throwable $th) {
+            $file = $th->getFile();
+            $line = $th->getLine();
+            $msg = $th->getMessage();
+
+            $this->log->error("$file (line: $line) - $msg", $th->getTrace());
         }
     }
 }
