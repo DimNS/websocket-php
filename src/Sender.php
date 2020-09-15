@@ -30,18 +30,23 @@ class Sender
     protected $log;
 
     /**
-     * @param integer $tcp_port TCP порт
+     * @param integer $tcp_port   Каталог для логов
+     * @param string  $log_folder TCP порт
      *
      * @author  Дмитрий Щербаков <atomcms@ya.ru>
      *
      * @version 15.09.2020
      */
-    public function __construct($tcp_port)
+    public function __construct($tcp_port, $log_folder = '')
     {
         $this->tcp_port = $tcp_port;
 
-        $this->log = new Logger('WebSocketPHP');
-        $this->log->pushHandler(new StreamHandler(__DIR__ . '/../error.log'));
+        if (empty($log_folder)) {
+            $this->log = new Logger('WebSocketPHP');
+            $this->log->pushHandler(new StreamHandler(__DIR__ . '/../error.log'));
+        } else {
+            $this->log = Log::create($log_folder);
+        }
     }
 
     /**
