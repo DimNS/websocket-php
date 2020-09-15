@@ -58,8 +58,12 @@ class Sender
     public function send($user_id, $type, $data = [])
     {
         try {
-            // Соединяемся с локальным tcp-сервером
-            $instance = stream_socket_client('tcp://127.0.0.1:' . $this->tcp_port, $errno, $errstr);
+            // stream_socket_client при ошибках кидает Warning, который не ловится через try...catch
+            // поэтому ставим такой костыль чтобы не было варнинга, ведь мы итак ловим ошибку и проверяем через if
+            $old_error_reporting = error_reporting(); // Сохраним существующий уровень ошибок
+            error_reporting($old_error_reporting & ~E_WARNING); // Отключим уровень E_WARNING
+            $instance = stream_socket_client('tcp://127.0.0.1:' . $this->tcp_port, $errno, $errstr); // Соединяемся с локальным tcp-сервером
+            error_reporting($old_error_reporting); // Восстановим старый уровень ошибок
 
             if (!$instance) {
                 $this->log->error("$errstr ($errno)");
